@@ -1,5 +1,3 @@
-from ast import keyword
-from email.mime import base
 from urllib import response
 import requests
 import time
@@ -7,7 +5,7 @@ import random
 from bs4 import BeautifulSoup
 from threading import Thread
 import logging; logging.basicConfig(level=logging.DEBUG)
-
+import faker
 
 def user_agent():
   fake = faker.Faker()
