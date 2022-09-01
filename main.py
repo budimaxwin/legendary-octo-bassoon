@@ -59,7 +59,7 @@ def search_keyword(query):
     return list_link
 
 def check_proxy(baseurl, proxies):
-    google_url = "https://www.google.co.id/"
+    google_url = "http://google.co.id/"
 
     i=0
     for proxy in proxies:
@@ -76,6 +76,8 @@ def check_proxy(baseurl, proxies):
         }
         session = requests.Session()
         session.proxies = proxies
+
+        print(session.auth, google_url, baseurl)
 
         try:
             r = session.get(google_url+baseurl, headers=headers, timeout=5, verify=False)
