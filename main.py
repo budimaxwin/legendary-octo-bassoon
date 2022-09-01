@@ -59,7 +59,7 @@ def search_keyword(query):
     return list_link
 
 def check_proxy(baseurl, proxies):
-    google_url = "http://google.co.id/"
+    google_url = "http://google.co.id"
 
     i=0
     for proxy in proxies:
