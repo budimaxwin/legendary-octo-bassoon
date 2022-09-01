@@ -1,18 +1,22 @@
+from ast import keyword
+from email.mime import base
 from urllib import response
 import requests
 import time
 import random
+import faker
 from bs4 import BeautifulSoup
 from threading import Thread
-import logging; logging.basicConfig(level=logging.DEBUG)
-import faker
+# import logging; logging.basicConfig(level=logging.DEBUG)
+
+# global variable here
 
 def user_agent():
-  fake = faker.Faker()
-  useragent = fake.user_agent()
-  return useragent
-  
-# global variable here
+    fake = faker.Faker()
+    useragent = fake.user_agent()
+    # print(useragent)
+    return useragent
+
 useragents = [
     'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', 
     'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
@@ -56,10 +60,15 @@ def search_keyword(query):
 
 def check_proxy(baseurl, proxies):
     google_url = "https://www.google.co.id/"
+
+    i=0
     for proxy in proxies:
+        i+=1
+
+        useragent = user_agent()
         headers = {
-            'User-agent': user_agent(),
-            "referer": random.choice(routes),
+            'User-agent': useragent,
+            "referer": random.choice(bad_referer),
             "Upgrade-Insecure-Requests": "1"
         }
         proxies = {
@@ -70,7 +79,7 @@ def check_proxy(baseurl, proxies):
 
         try:
             r = session.get(google_url+baseurl, headers=headers, timeout=5, verify=False)
-            print(r.url)
+            print(i, r.status_code, useragent)
             if r.status_code == 200:
                 f = open('proxy_list.txt', 'a+')
                 f.write(proxy + "\n")
@@ -115,23 +124,13 @@ def counter(proxies):
 def main():
     proxies = proxy_for_you()
     dividers = counter(proxies=proxies)
-    keyword = "cuan777 site:beacons.ai" #input("Keyword: ")
+    keyword = "cuan777 site:beacons.ai"
     urls = search_keyword(keyword)
     baseurl = [
         "http://api.linkr.bio/callbacks/go?url=https://beacons.ai/cuan777",
         "https://www.google.co.id/amp/beacons.ai/cuan777"
     ]#None
-    baseurl = urls[0] #random.choice(baseurl)
-
-    #for i in range(len(urls)):
-    #    print(i+1, urls[i].split("&sa")[0])
-    #    i+=1
-
-    #choice = input('Link number: ')
-
-    #if choice.isdigit():
-    #    baseurl = urls[int(choice) - 1]
-
+    baseurl = urls[0]
     for div in dividers:
         t = []
         for i in range(div[0], div[1]):
@@ -142,7 +141,6 @@ def main():
         t = []
 
 if __name__=="__main__":
-    print(user_agent())
     while(True):
         main()
         time.sleep(60*60)
